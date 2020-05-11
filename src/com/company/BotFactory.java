@@ -16,7 +16,7 @@ public class BotFactory {
     //do bots only drop both items once, or do they refill?
 
     private static List<String> inputBin;
-    private static Map<String, List<Integer>> outputBins;
+    private static Map<String, List<String>> outputBins;
     private static Map<String, Bot> botsMap;
 
     private static List<String> readInstructions() throws IOException {
@@ -51,20 +51,15 @@ public class BotFactory {
                 while (it.hasNext()) {
                     Map.Entry entry = (Map.Entry) it.next();
                     Bot workingBot = (Bot) entry.getValue();
-                    if (workingBot.getHoldingValues().size() > 0) {
-                        String lowDestination;
-                        String lowDestinationid;
-                        String highDestination;
-                        String highDestinationId;
-
-                        deliverMicrochip(workingBot);
+                    if (workingBot.getHoldingValues().size() == 2) {
+                        deliverMicrochips(workingBot);
 
                     }
 
 
                 }
 
-            } while ()
+            } while (!inputBin.isEmpty());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -73,8 +68,40 @@ public class BotFactory {
 
     }
 
-    private static void deliverMicrochip(Bot workingBot) {
+    private static void deliverMicrochips(Bot workingBot) {
+        //deliver low destination
+        String lowDest = workingBot.getLowDestination();
+        String lowDestID = workingBot.getLowDestinationID();
 
+        String lowValue = workingBot.getHoldingValues().first();
+        String highValue = workingBot.getHoldingValues().last();
+
+        if (lowDest != null && lowDestID != null) {
+            //attempt delivery
+
+
+            if (workingBot.getLowDestination().equalsIgnoreCase("output")) {
+                //check if output bin already represented and drop in output bin
+                if (outputBins.containsKey(lowDestID)) {
+
+                    List<String> valueList = outputBins.get(lowDest);
+                    valueList.add(lowValue);
+                    outputBins.put(lowDestID, valueList);
+
+                } else {
+                    List<String> valueList = new ArrayList<>();
+                    valueList.add(lowValue);
+                    outputBins.put(lowDestID, valueList);
+                }
+
+            } else if(workingBot.getLowDestination().equalsIgnoreCase("bot")) {
+                //check if bot already has two assigned
+
+            }
+        }
+
+
+        ///deliver high destination
 
     }
 
