@@ -4,18 +4,18 @@ import java.util.TreeSet;
 
 public class Bot {
 
-    private int id;
+    private String id;
     private int lowDestination;  // 0-bot, 1-output
     private int lowDestinationID; // id of destination
     private int highDestination;  // 0-bot, 1-output
     private int highDestinationID; //id of destination
-    private TreeSet<Integer> holdingValues;
+    private TreeSet<String> holdingValues;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -51,11 +51,11 @@ public class Bot {
         this.highDestinationID = highDestinationID;
     }
 
-    public TreeSet<Integer> getHoldingValues() {
+    public TreeSet<String> getHoldingValues() {
         return holdingValues;
     }
 
-    public void setHoldingValues(TreeSet<Integer> holdingValues) {
+    public void setHoldingValues(TreeSet<String> holdingValues) {
         this.holdingValues = holdingValues;
     }
 }
