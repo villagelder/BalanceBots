@@ -16,7 +16,7 @@ public class BotFactory {
     //do bots only drop both items once, or do they refill?
 
     private static List<String> inputBin;
-    private static Map<String, List<String>> outputBins;
+    private static Map<String, List<Integer>> outputBins;
     private static Map<String, Bot> botsMap;
 
     private static List<String> readInstructions() throws IOException {
@@ -91,7 +91,7 @@ public class BotFactory {
         while (it.hasNext()) {
             Map.Entry entry = (Map.Entry) it.next();
             Bot bb8 = (Bot) entry.getValue();
-            TreeSet<String> bb8Values = bb8.getHoldingValues();
+            TreeSet<Integer> bb8Values = bb8.getHoldingValues();
             TreeSet<String> compareValues = new TreeSet<>();
             compareValues.add("61");
             compareValues.add("17");
@@ -109,24 +109,24 @@ public class BotFactory {
         String lowDestID = workingBot.getLowDestinationID();
         String highDest = workingBot.getHighDestination();
         String highDestID = workingBot.getHighDestinationID();
-        String lowValue = workingBot.getHoldingValues().first();
-        String highValue = workingBot.getHoldingValues().last();
+        Integer lowValue = workingBot.getHoldingValues().first();
+        Integer highValue = workingBot.getHoldingValues().last();
         TreeSet<String> undeliveredList = new TreeSet<>();
 
         //attempt delivery twice
 
-        for (String str : workingBot.getHoldingValues()) {
+        for (Integer num : workingBot.getHoldingValues()) {
             //deliver low destination to output bin
             if (lowDest.equalsIgnoreCase("output")) {
                 //check if output bin already represented and add to output bin
                 if (outputBins.containsKey(lowDestID)) {
 
-                    List<String> valueList = outputBins.get(lowDest);
+                    List<Integer> valueList = outputBins.get(lowDestID);
                     valueList.add(lowValue);
                     outputBins.put(lowDestID, valueList);
 
                 } else {
-                    List<String> valueList = new ArrayList<>();
+                    List<Integer> valueList = new ArrayList<>();
                     valueList.add(lowValue);
                     outputBins.put(lowDestID, valueList);
                 }
@@ -139,8 +139,8 @@ public class BotFactory {
                     //hold this item
                     undeliveredList.add(lowValue);
                 } else {
-                    TreeSet<String> valueList = workingBot.getHoldingValues();
-                    valueList.add(lowValue);
+                    TreeSet<Integer> valueList = workingBot.getHoldingValues();
+                    valueList.add(Integer.parseInt(lowValue));
                     workingBot.setHoldingValues(valueList);
                 }
 

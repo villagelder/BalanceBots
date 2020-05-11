@@ -9,7 +9,7 @@ public class Bot {
     private String lowDestinationID; // id of destination
     private String highDestination;  //bot or output
     private String highDestinationID; //id of destination
-    private TreeSet<String> holdingValues;
+    private TreeSet<Integer> holdingValues;
 
     public String getId() {
         return id;
@@ -51,11 +51,11 @@ public class Bot {
         this.highDestinationID = highDestinationID;
     }
 
-    public TreeSet<String> getHoldingValues() {
+    public TreeSet<Integer> getHoldingValues() {
         return holdingValues;
     }
 
-    public void setHoldingValues(TreeSet<String> holdingValues) {
+    public void setHoldingValues(TreeSet<Integer> holdingValues) {
         this.holdingValues = holdingValues;
     }
 }
