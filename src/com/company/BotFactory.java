@@ -48,19 +48,6 @@ public class BotFactory {
                 parseInstructions(instruction);
             }
 
-//            Iterator it = botsMap.entrySet().iterator();
-//            while (it.hasNext()) {
-//                Map.Entry entry = (Map.Entry) it.next();
-//                Bot bb8 = (Bot) entry.getValue();
-//
-//                System.out.println("ID: " + bb8.getId());
-//                System.out.println("Holding Values: " + bb8.getHoldingValues());
-//                System.out.println("Low Destination: " + bb8.getLowDestination());
-//                System.out.println("Low Destination ID: " + bb8.getLowDestinationID());
-//                System.out.println("High Destination: " + bb8.getHighDestination());
-//                System.out.println("High Destination ID: " + bb8.getHighDestinationID());
-//            }
-
             do {
 //
 //                for (String instr : inputBin)
@@ -71,14 +58,18 @@ public class BotFactory {
                     Bot deliveredBot;
                     Map.Entry entry = (Map.Entry) iter.next();
                     Bot workingBot = (Bot) entry.getValue();
+
+                    if (workingBot.getHoldingValues() !=null && checkIDMatch(workingBot.getHoldingValues())) {
+                        return workingBot.getId();
+                    }
+
+
                     if (workingBot.getHoldingValues() != null && workingBot.getHoldingValues().size() == 2) {
                         deliveredBot = deliverMicrochips(workingBot);
                         botsMap.put(deliveredBot.getId(), deliveredBot);
                     }
 
                 }
-
-                System.out.println("Input bin: " + inputBin);
 
             } while (!inputBin.isEmpty());
 
@@ -87,21 +78,18 @@ public class BotFactory {
             e.printStackTrace();
         }
 
-        Iterator it = botsMap.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry entry = (Map.Entry) it.next();
-            Bot bb8 = (Bot) entry.getValue();
-            TreeSet<Integer> bb8Values = bb8.getHoldingValues();
-            TreeSet<String> compareValues = new TreeSet<>();
-            compareValues.add("61");
-            compareValues.add("17");
-
-
-            if (bb8Values != null && bb8Values.equals(compareValues))
-                return bb8.getId();
-        }
 
         return id;
+    }
+
+    private static boolean checkIDMatch(TreeSet<Integer> holdingValues) {
+
+
+        TreeSet<String> compareValues = new TreeSet<>();
+        compareValues.add("61");
+        compareValues.add("17");
+
+        return holdingValues.equals(compareValues);
     }
 
     private static Bot deliverMicrochips(Bot workingBot) {
@@ -111,7 +99,7 @@ public class BotFactory {
         String highDestID = workingBot.getHighDestinationID();
         Integer lowValue = workingBot.getHoldingValues().first();
         Integer highValue = workingBot.getHoldingValues().last();
-        TreeSet<String> undeliveredList = new TreeSet<>();
+        TreeSet<Integer> undeliveredList = new TreeSet<>();
 
         //attempt delivery twice
 
@@ -140,7 +128,7 @@ public class BotFactory {
                     undeliveredList.add(lowValue);
                 } else {
                     TreeSet<Integer> valueList = workingBot.getHoldingValues();
-                    valueList.add(Integer.parseInt(lowValue));
+                    valueList.add(lowValue);
                     workingBot.setHoldingValues(valueList);
                 }
 
@@ -149,12 +137,12 @@ public class BotFactory {
                 //check if output bin already represented and add to output bin
                 if (outputBins.containsKey(highDestID)) {
 
-                    List<String> valueList = outputBins.get(highDest);
+                    List<Integer> valueList = outputBins.get(highDest);
                     valueList.add(highValue);
                     outputBins.put(lowDestID, valueList);
 
                 } else {
-                    List<String> valueList = new ArrayList<>();
+                    List<Integer> valueList = new ArrayList<>();
                     valueList.add(highValue);
                     outputBins.put(highDestID, valueList);
                 }
@@ -167,7 +155,7 @@ public class BotFactory {
                     //hold this item
                     undeliveredList.add(highValue);
                 } else {
-                    TreeSet<String> valueList = workingBot.getHoldingValues();
+                    TreeSet<Integer> valueList = workingBot.getHoldingValues();
                     valueList.add(highValue);
                     workingBot.setHoldingValues(valueList);
                 }
@@ -200,8 +188,8 @@ public class BotFactory {
 
 
         if (bot.getHoldingValues() == null || bot.getHoldingValues().size() < 2) {
-            TreeSet<String> holdingVals = new TreeSet<>();
-            holdingVals.add(inList.get(1));
+            TreeSet<Integer> holdingVals = new TreeSet<>();
+            holdingVals.add(Integer.parseInt(inList.get(1)));
             bot.setHoldingValues(holdingVals);
             botsMap.put(bot.getId(), bot);
 
