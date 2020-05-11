@@ -5,9 +5,9 @@ import java.util.TreeSet;
 public class Bot {
 
     private String id;
-    private String lowDestination;  // bot or output
+    private String lowDestinationType;  // bot or output
     private String lowDestinationID; // id of destination
-    private String highDestination;  //bot or output
+    private String highDestinationType;  //bot or output
     private String highDestinationID; //id of destination
     private TreeSet<Integer> holdingValues;
 
@@ -19,20 +19,20 @@ public class Bot {
         this.id = id;
     }
 
-    public String getLowDestination() {
-        return lowDestination;
+    public String getLowDestinationType() {
+        return lowDestinationType;
     }
 
-    public void setLowDestination(String lowDestination) {
-        this.lowDestination = lowDestination;
+    public void setLowDestinationType(String lowDestinationType) {
+        this.lowDestinationType = lowDestinationType;
     }
 
-    public String getHighDestination() {
-        return highDestination;
+    public String getHighDestinationType() {
+        return highDestinationType;
     }
 
-    public void setHighDestination(String highDestination) {
-        this.highDestination = highDestination;
+    public void setHighDestinationType(String highDestinationType) {
+        this.highDestinationType = highDestinationType;
     }
 
     public String getLowDestinationID() {

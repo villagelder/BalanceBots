@@ -1,7 +1,6 @@
 package com.company;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class BotFactory {
@@ -49,9 +48,9 @@ public class BotFactory {
             }
 
             do {
-//
-//                for (String instr : inputBin)
-//                    parseInstructions(instr);
+
+                for (String instr : inputBin)
+                    setValues(instr);
 
                 Iterator iter = botsMap.entrySet().iterator();
                 while (iter.hasNext()) {
@@ -93,9 +92,9 @@ public class BotFactory {
     }
 
     private static Bot deliverMicrochips(Bot workingBot) {
-        String lowDest = workingBot.getLowDestination();
+        String lowDest = workingBot.getLowDestinationType();
         String lowDestID = workingBot.getLowDestinationID();
-        String highDest = workingBot.getHighDestination();
+        String highDest = workingBot.getHighDestinationType();
         String highDestID = workingBot.getHighDestinationID();
         Integer lowValue = workingBot.getHoldingValues().first();
         Integer highValue = workingBot.getHoldingValues().last();
@@ -186,30 +185,33 @@ public class BotFactory {
             bot.setId(inList.get(5));
         }
 
-        TreeSet<Integer> holdingVals;
+        TreeSet<Integer> holdingVals = new TreeSet<>();
 
         if (bot.getHoldingValues() == null) {
-            holdingVals = new TreeSet<>();
-        } else {
-            holdingVals = bot.getHoldingValues();
-        }
-        if (bot.getHoldingValues() == null || bot.getHoldingValues().size() < 2) {
             holdingVals.add(Integer.parseInt(inList.get(1)));
-            bot.setHoldingValues(holdingVals);
-            botsMap.put(bot.getId(), bot);
 
             if (inputBin.contains(instruction))
                 inputBin.remove(instruction);
 
+        } else if (bot.getHoldingValues().size() < 2) {
+            holdingVals = bot.getHoldingValues();
+            holdingVals.add(Integer.parseInt(inList.get(1)));
+
+            if (inputBin.contains(instruction))
+                inputBin.remove(instruction);
         } else {
-            //if bot already holds two microships then value instructions must be placed in input bin
+            //if bot already holds two microchips then value instructions must be placed in input bin
             inputBin.add(instruction);
         }
+
+        bot.setHoldingValues(holdingVals);
+        botsMap.put(bot.getId(), bot);
     }
 
     private static void setBotInstruction(String instruction) {
         List<String> inList = Arrays.asList(instruction.split(" "));
         Bot bot;
+
         if (botsMap.containsKey(inList.get(1))) {
             bot = botsMap.get(inList.get(1));
         } else {
@@ -218,9 +220,9 @@ public class BotFactory {
 
         }
 
-        bot.setLowDestination(inList.get(5));
+        bot.setLowDestinationType(inList.get(5));
         bot.setLowDestinationID(inList.get(6));
-        bot.setHighDestination(inList.get(10));
+        bot.setHighDestinationType(inList.get(10));
         bot.setHighDestinationID(inList.get(11));
         botsMap.put(bot.getId(), bot);
     }
