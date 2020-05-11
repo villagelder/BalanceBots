@@ -44,6 +44,28 @@ public class BotFactory {
             List<String> instructionsList = readInstructions();
             for (String instruction : instructionsList)
                 parseInstructions(instruction);
+
+            Iterator it = botsMap.entrySet().iterator();
+
+            do {
+                while (it.hasNext()) {
+                    Map.Entry entry = (Map.Entry) it.next();
+                    Bot workingBot = (Bot) entry.getValue();
+                    if (workingBot.getHoldingValues().size() > 0) {
+                        String lowDestination;
+                        String lowDestinationid;
+                        String highDestination;
+                        String highDestinationId;
+
+                        deliverMicrochip(workingBot);
+
+                    }
+
+
+                }
+
+            } while ()
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -51,18 +73,21 @@ public class BotFactory {
 
     }
 
-    private static void parseInstructions(String instruction) {
-
-        if (instruction.startsWith("bot")) {
-            processBotInstruction(instruction);
-        } else if (instruction.startsWith("value")) {
-            processValueInstruction(instruction);
-        }
+    private static void deliverMicrochip(Bot workingBot) {
 
 
     }
 
-    private static void processValueInstruction(String instruction) {
+    private static void parseInstructions(String instruction) {
+
+        if (instruction.startsWith("bot")) {
+            setBotInstruction(instruction);
+        } else if (instruction.startsWith("value")) {
+            setValues(instruction);
+        }
+    }
+
+    private static void setValues(String instruction) {
         List<String> inList = Arrays.asList(instruction.split(" "));
         Bot bot;
         if (botsMap.containsKey(inList.get(5))) {
@@ -80,8 +105,19 @@ public class BotFactory {
         }
     }
 
-    private static void processBotInstruction(String instruction) {
-        List<String> inList = new ArrayList<>();
+    private static void setBotInstruction(String instruction) {
+        List<String> inList = Arrays.asList(instruction.split(" "));
+        Bot bot;
+        if (botsMap.containsKey(inList.get(1))) {
+            bot = botsMap.get(inList.get(1));
+        } else {
+            bot = new Bot();
+            bot.setId(inList.get(1));
+            bot.setLowDestination(inList.get(5));
+            bot.setLowDestinationID(inList.get(6));
+            bot.setHighDestination(inList.get(10));
+            bot.setHighDestinationID(inList.get(11));
+        }
     }
 
 

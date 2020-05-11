@@ -5,10 +5,10 @@ import java.util.TreeSet;
 public class Bot {
 
     private String id;
-    private int lowDestination;  // 0-bot, 1-output
-    private int lowDestinationID; // id of destination
-    private int highDestination;  // 0-bot, 1-output
-    private int highDestinationID; //id of destination
+    private String lowDestination;  // bot or output
+    private String lowDestinationID; // id of destination
+    private String highDestination;  //bot or output
+    private String highDestinationID; //id of destination
     private TreeSet<String> holdingValues;
 
     public String getId() {
@@ -19,35 +19,35 @@ public class Bot {
         this.id = id;
     }
 
-    public int getLowDestination() {
+    public String getLowDestination() {
         return lowDestination;
     }
 
-    public void setLowDestination(int lowDestination) {
+    public void setLowDestination(String lowDestination) {
         this.lowDestination = lowDestination;
     }
 
-    public int getLowDestinationID() {
-        return lowDestinationID;
-    }
-
-    public void setLowDestinationID(int lowDestinationID) {
-        this.lowDestinationID = lowDestinationID;
-    }
-
-    public int getHighDestination() {
+    public String getHighDestination() {
         return highDestination;
     }
 
-    public void setHighDestination(int highDestination) {
+    public void setHighDestination(String highDestination) {
         this.highDestination = highDestination;
     }
 
-    public int getHighDestinationID() {
+    public String getLowDestinationID() {
+        return lowDestinationID;
+    }
+
+    public void setLowDestinationID(String lowDestinationID) {
+        this.lowDestinationID = lowDestinationID;
+    }
+
+    public String getHighDestinationID() {
         return highDestinationID;
     }
 
-    public void setHighDestinationID(int highDestinationID) {
+    public void setHighDestinationID(String highDestinationID) {
         this.highDestinationID = highDestinationID;
     }
 
