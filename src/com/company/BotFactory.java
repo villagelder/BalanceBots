@@ -59,9 +59,8 @@ public class BotFactory {
                     Map.Entry entry = (Map.Entry) iter.next();
                     Bot workingBot = (Bot) entry.getValue();
 
-                    if (workingBot.getHoldingValues() !=null && checkIDMatch(workingBot.getHoldingValues())) {
+                    if (workingBot.getHoldingValues() != null && checkIDMatch(workingBot.getHoldingValues()))
                         return workingBot.getId();
-                    }
 
 
                     if (workingBot.getHoldingValues() != null && workingBot.getHoldingValues().size() == 2) {
@@ -84,10 +83,11 @@ public class BotFactory {
 
     private static boolean checkIDMatch(TreeSet<Integer> holdingValues) {
 
+        TreeSet<Integer> compareValues = new TreeSet<>();
+        compareValues.add(61);
+        compareValues.add(17);
 
-        TreeSet<String> compareValues = new TreeSet<>();
-        compareValues.add("61");
-        compareValues.add("17");
+        System.out.println(holdingValues + "  compared to  " + compareValues);
 
         return holdingValues.equals(compareValues);
     }
@@ -186,9 +186,14 @@ public class BotFactory {
             bot.setId(inList.get(5));
         }
 
+        TreeSet<Integer> holdingVals;
 
+        if (bot.getHoldingValues() == null) {
+            holdingVals = new TreeSet<>();
+        } else {
+            holdingVals = bot.getHoldingValues();
+        }
         if (bot.getHoldingValues() == null || bot.getHoldingValues().size() < 2) {
-            TreeSet<Integer> holdingVals = new TreeSet<>();
             holdingVals.add(Integer.parseInt(inList.get(1)));
             bot.setHoldingValues(holdingVals);
             botsMap.put(bot.getId(), bot);
