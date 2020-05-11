@@ -45,17 +45,17 @@ public class BotFactory {
             for (String instruction : instructionsList)
                 parseInstructions(instruction);
 
-            Iterator it = botsMap.entrySet().iterator();
-
             do {
+
+                Iterator it = botsMap.entrySet().iterator();
                 while (it.hasNext()) {
+                    Bot deliveredBot;
                     Map.Entry entry = (Map.Entry) it.next();
                     Bot workingBot = (Bot) entry.getValue();
                     if (workingBot.getHoldingValues().size() == 2) {
-                        deliverMicrochips(workingBot);
-
+                        deliveredBot = deliverMicrochips(workingBot);
+                        botsMap.put(deliveredBot.getId(), deliveredBot);
                     }
-
 
                 }
 
@@ -68,78 +68,79 @@ public class BotFactory {
 
     }
 
-    private static void deliverMicrochips(Bot workingBot) {
+    private static Bot deliverMicrochips(Bot workingBot) {
         String lowDest = workingBot.getLowDestination();
         String lowDestID = workingBot.getLowDestinationID();
         String highDest = workingBot.getHighDestination();
         String highDestID = workingBot.getHighDestinationID();
-
         String lowValue = workingBot.getHoldingValues().first();
         String highValue = workingBot.getHoldingValues().last();
+        TreeSet<String> undeliveredList = new TreeSet<>();
 
-        if (lowDest != null && lowDestID != null) {
-            //attempt delivery
-            //deliver low destination to output bin
-            if (lowDest.equalsIgnoreCase("output")) {
-                //check if output bin already represented and add to output bin
-                if (outputBins.containsKey(lowDestID)) {
+        //attempt delivery twice
 
-                    List<String> valueList = outputBins.get(lowDest);
-                    valueList.add(lowValue);
-                    outputBins.put(lowDestID, valueList);
+        for (String str : workingBot.getHoldingValues()) {
+        //deliver low destination to output bin
+        if (lowDest.equalsIgnoreCase("output")) {
+            //check if output bin already represented and add to output bin
+            if (outputBins.containsKey(lowDestID)) {
 
-                } else {
-                    List<String> valueList = new ArrayList<>();
-                    valueList.add(lowValue);
-                    outputBins.put(lowDestID, valueList);
-                }
+                List<String> valueList = outputBins.get(lowDest);
+                valueList.add(lowValue);
+                outputBins.put(lowDestID, valueList);
 
-                //deliver low destination to bot
-            } else if (lowDest.equalsIgnoreCase("bot")) {
-                //check if bot already has two assigned
-                if (workingBot.getHoldingValues().size() > 1) {
-                    //cannot deliver
-                    //hold this item
-                } else {
-                    TreeSet<String> valueList = workingBot.getHoldingValues();
-                    valueList.add(lowValue);
-                    workingBot.setHoldingValues(valueList);
-                }
-
-                //deliver high destination to output bin
-            } else if (highDest.equalsIgnoreCase("output")) {
-                //check if output bin already represented and add to output bin
-                if (outputBins.containsKey(highDestID)) {
-
-                    List<String> valueList = outputBins.get(highDest);
-                    valueList.add(highValue);
-                    outputBins.put(lowDestID, valueList);
-
-                } else {
-                    List<String> valueList = new ArrayList<>();
-                    valueList.add(highValue);
-                    outputBins.put(highDestID, valueList);
-                }
-
-                //deliver high destination to bot
-            } else if (highDest.equalsIgnoreCase("bot")) {
-                //check if bot already has two assigned
-                if (workingBot.getHoldingValues().size() > 1) {
-                    //cannot deliver
-                    //hold this item
-                } else {
-                    TreeSet<String> valueList = workingBot.getHoldingValues();
-                    valueList.add(highValue);
-                    workingBot.setHoldingValues(valueList);
-                }
-
-                //unable to deliver
             } else {
-                //rule formatting or other error
+                List<String> valueList = new ArrayList<>();
+                valueList.add(lowValue);
+                outputBins.put(lowDestID, valueList);
             }
-        }
 
+            //deliver low destination to bot
+        } else if (lowDest.equalsIgnoreCase("bot")) {
+            //check if bot already has two assigned
+            if (workingBot.getHoldingValues().size() > 1) {
+                //cannot deliver
+                //hold this item
+                undeliveredList.add(lowValue);
+            } else {
+                TreeSet<String> valueList = workingBot.getHoldingValues();
+                valueList.add(lowValue);
+                workingBot.setHoldingValues(valueList);
+            }
+
+            //deliver high destination to output bin
+        } else if (highDest.equalsIgnoreCase("output")) {
+            //check if output bin already represented and add to output bin
+            if (outputBins.containsKey(highDestID)) {
+
+                List<String> valueList = outputBins.get(highDest);
+                valueList.add(highValue);
+                outputBins.put(lowDestID, valueList);
+
+            } else {
+                List<String> valueList = new ArrayList<>();
+                valueList.add(highValue);
+                outputBins.put(highDestID, valueList);
+            }
+
+            //deliver high destination to bot
+        } else if (highDest.equalsIgnoreCase("bot")) {
+            //check if bot already has two assigned
+            if (workingBot.getHoldingValues().size() > 1) {
+                //cannot deliver
+                //hold this item
+                undeliveredList.add(highValue);
+            } else {
+                TreeSet<String> valueList = workingBot.getHoldingValues();
+                valueList.add(highValue);
+                workingBot.setHoldingValues(valueList);
+            }
+
+        } }
+        workingBot.setHoldingValues(undeliveredList);
+        return workingBot;
     }
+
 
     private static void parseInstructions(String instruction) {
 
@@ -163,7 +164,9 @@ public class BotFactory {
         if (bot.getHoldingValues().isEmpty() || bot.getHoldingValues().size() < 2) {
             bot.getHoldingValues().add(inList.get(1));
             botsMap.put(bot.getId(), bot);
+
         } else {
+            //if bot already holds two microships then value instructions must be placed in input bin
             inputBin.add(instruction);
         }
     }
