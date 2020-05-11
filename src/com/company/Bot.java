@@ -1,5 +1,7 @@
 package com.company;
 
+import java.util.TreeSet;
+
 public class Bot {
 
     private int id;
@@ -7,6 +9,7 @@ public class Bot {
     private int lowDestinationID; // id of destination
     private int highDestination;  // 0-bot, 1-output
     private int highDestinationID; //id of destination
+    private TreeSet<Integer> holdingValues;
 
     public int getId() {
         return id;
@@ -48,6 +51,11 @@ public class Bot {
         this.highDestinationID = highDestinationID;
     }
 
+    public TreeSet<Integer> getHoldingValues() {
+        return holdingValues;
+    }
 
-
+    public void setHoldingValues(TreeSet<Integer> holdingValues) {
+        this.holdingValues = holdingValues;
+    }
 }
