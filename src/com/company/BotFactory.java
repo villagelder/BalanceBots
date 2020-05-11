@@ -44,25 +44,41 @@ public class BotFactory {
 
         try {
             List<String> instructionsList = readInstructions();
-            for (String instruction : instructionsList)
+            for (String instruction : instructionsList) {
                 parseInstructions(instruction);
+            }
+
+//            Iterator it = botsMap.entrySet().iterator();
+//            while (it.hasNext()) {
+//                Map.Entry entry = (Map.Entry) it.next();
+//                Bot bb8 = (Bot) entry.getValue();
+//
+//                System.out.println("ID: " + bb8.getId());
+//                System.out.println("Holding Values: " + bb8.getHoldingValues());
+//                System.out.println("Low Destination: " + bb8.getLowDestination());
+//                System.out.println("Low Destination ID: " + bb8.getLowDestinationID());
+//                System.out.println("High Destination: " + bb8.getHighDestination());
+//                System.out.println("High Destination ID: " + bb8.getHighDestinationID());
+//            }
 
             do {
+//
+//                for (String instr : inputBin)
+//                    parseInstructions(instr);
 
-                for (String instr : inputBin)
-                    parseInstructions(instr);
-
-                Iterator it = botsMap.entrySet().iterator();
-                while (it.hasNext()) {
+                Iterator iter = botsMap.entrySet().iterator();
+                while (iter.hasNext()) {
                     Bot deliveredBot;
-                    Map.Entry entry = (Map.Entry) it.next();
+                    Map.Entry entry = (Map.Entry) iter.next();
                     Bot workingBot = (Bot) entry.getValue();
-                    if (workingBot.getHoldingValues().size() == 2) {
+                    if (workingBot.getHoldingValues() != null && workingBot.getHoldingValues().size() == 2) {
                         deliveredBot = deliverMicrochips(workingBot);
                         botsMap.put(deliveredBot.getId(), deliveredBot);
                     }
 
                 }
+
+                System.out.println("Input bin: " + inputBin);
 
             } while (!inputBin.isEmpty());
 
@@ -80,7 +96,8 @@ public class BotFactory {
             compareValues.add("61");
             compareValues.add("17");
 
-            if (bb8Values.equals(compareValues))
+
+            if (bb8Values != null && bb8Values.equals(compareValues))
                 return bb8.getId();
         }
 
@@ -182,7 +199,6 @@ public class BotFactory {
         }
 
 
-
         if (bot.getHoldingValues() == null || bot.getHoldingValues().size() < 2) {
             TreeSet<String> holdingVals = new TreeSet<>();
             holdingVals.add(inList.get(1));
@@ -206,11 +222,14 @@ public class BotFactory {
         } else {
             bot = new Bot();
             bot.setId(inList.get(1));
-            bot.setLowDestination(inList.get(5));
-            bot.setLowDestinationID(inList.get(6));
-            bot.setHighDestination(inList.get(10));
-            bot.setHighDestinationID(inList.get(11));
+
         }
+
+        bot.setLowDestination(inList.get(5));
+        bot.setLowDestinationID(inList.get(6));
+        bot.setHighDestination(inList.get(10));
+        bot.setHighDestinationID(inList.get(11));
+        botsMap.put(bot.getId(), bot);
     }
 
 
