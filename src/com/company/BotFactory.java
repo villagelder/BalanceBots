@@ -12,7 +12,7 @@ public class BotFactory {
     //iterate and parse instructions assigning to bot list
     //value "goes to" means assigned to at start?
     //only transfer chips if bot holds two chips to process higher and lower
-    //do bots only drop both items once, or do they refill?
+    //do bots only drop both items once, or do they refill
 
     private static List<String> inputBin;
     private static Map<String, List<Integer>> outputBins;
